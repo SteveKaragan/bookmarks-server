@@ -1,10 +1,10 @@
-const express = require('express')
-const bookmarksRouter = express.Router()
-const bodyParser = express.json()
+const express = require('express');
+const bookmarksRouter = express.Router();
+const bodyParser = express.json();
 const { v4: uuid } = require('uuid');
 const logger = require('./logger');
-const { bookmarks } = require('./store')
-const { isWebUri } = require('valid-url')
+const { bookmarks } = require('./store');
+const { isWebUri } = require('valid-url');
 
 bookmarksRouter
   .route('/bookmarks')
@@ -16,18 +16,18 @@ bookmarksRouter
         if (!req.body[field]) {
           logger.error(`${field} is required`)
           return res.status(400).send(`'${field}' is required`)
-        }
-      }
+        };
+      };
     const { title, description='', rating, url } = req.body;
     if (!Number.isInteger(rating) || rating < 0 || rating > 5) {
         logger.error(`Invalid rating '${rating}' supplied`)
         return res.status(400).send(`'rating' must be a number between 0 and 5`)
-      }
+      };
   
     if (!isWebUri(url)) {
         logger.error(`Invalid url '${url}' supplied`)
         return res.status(400).send(`'url' must be a valid URL`)
-      }
+      };
 
     const id = uuid();
 
@@ -37,9 +37,9 @@ bookmarksRouter
         description,
         rating,
         url
-    }
+    };
 
-    bookmarks.push(bookmark)
+    bookmarks.push(bookmark);
 
     logger.info(`Bookmark with id ${id} created`);
 
@@ -47,7 +47,7 @@ bookmarksRouter
         .status(201)
         .location(`http://localhost:8000/list/${id}`)
         .json({id});
-  })
+  });
 
 bookmarksRouter
   .route('/bookmarks/:id')
@@ -60,7 +60,7 @@ bookmarksRouter
         return res
         .status(404)
         .send('Bookmark Not Found');
-    }
+    };
 
     res.json(bookmark);
   })
@@ -74,7 +74,7 @@ bookmarksRouter
         return res
         .status(404)
         .send('Not Found');
-    }
+    };
 
     bookmarks.splice(bookmarkIndex, 1);
 
@@ -82,6 +82,6 @@ bookmarksRouter
     res
         .status(204)
         .end();
-  })
+  });
 
 module.exports = bookmarksRouter
