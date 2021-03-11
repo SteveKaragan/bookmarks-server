@@ -17,10 +17,6 @@ app.use(helmet());
 app.use(cors());
 app.use(validateBearerToken);
 
-// app.get('/', (req, res) => {
-//   res.send('Hello, world!')
-// });
-
 app.use(bookmarksRouter);
 
 app.use(errorHandler);
